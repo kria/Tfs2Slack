@@ -48,6 +48,12 @@ namespace DevCore.TfsNotificationRelay.Configuration
             get { return (string)this["teamProject"]; }
         }
 
+        [ConfigurationProperty("teamAreaPath")]
+        public string TeamAreaPath
+        {
+            get { return (string)this["teamAreaPath"]; }
+        }
+
         [ConfigurationProperty("gitRepository")]
         public string GitRepository
         {
