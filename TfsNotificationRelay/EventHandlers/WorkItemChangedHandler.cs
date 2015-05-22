@@ -45,6 +45,7 @@ namespace DevCore.TfsNotificationRelay.EventHandlers
                 ProjectName = ev.PortfolioProject,
                 IsStateChanged = ev.ChangedFields.StringFields.Any(f => f.ReferenceName == "System.State"),
                 IsAssignmentChanged = ev.ChangedFields.StringFields.Any(f => f.ReferenceName == "System.AssignedTo"),
+                IsCodeReviewRequest = ev.CoreFields.StringFields.Single(f => f.ReferenceName == "System.WorkItemType").NewValue.Contains("Code Review Request"),
                 State = ev.CoreFields.StringFields.Single(f => f.ReferenceName == "System.State").NewValue,
                 AssignedTo = ev.CoreFields.StringFields.Single(f => f.ReferenceName == "System.AssignedTo").NewValue
             };
