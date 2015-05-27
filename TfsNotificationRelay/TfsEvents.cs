@@ -35,7 +35,8 @@ namespace DevCore.TfsNotificationRelay
         PullRequestStatusUpdate = 512,
         PullRequestReviewerVote = 1024,
         BuildQualityChanged = 2048,
-        WorkItemCodeReviewRequested = 4096,
+        RepositoryCreated = 4096,
+        WorkItemCodeReviewRequested = 8192,
 
         All = 0xFFFFFFFF
     }
