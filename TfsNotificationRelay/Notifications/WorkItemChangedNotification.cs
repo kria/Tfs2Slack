@@ -32,8 +32,10 @@ namespace DevCore.TfsNotificationRelay.Notifications
         public int WiId { get; set; }
         public string WiTitle { get; set; }
         public string ProjectName { get; set; }
+        public string AreaPath { get; set; }
         public bool IsStateChanged { get; set; }
         public bool IsAssignmentChanged { get; set; }
+        public bool IsCodeReviewRequest { get; set; }
         public string AssignedTo { get; set; }
         public string State { get; set; }
 
@@ -77,9 +79,11 @@ namespace DevCore.TfsNotificationRelay.Notifications
         {
             var rule = eventRules.FirstOrDefault(r =>
                 (r.Events.HasFlag(TfsEvents.WorkItemStateChange) && IsStateChanged
-                || r.Events.HasFlag(TfsEvents.WorkItemAssignmentChange) && IsAssignmentChanged)
+                || r.Events.HasFlag(TfsEvents.WorkItemAssignmentChange) && IsAssignmentChanged
+                || r.Events.HasFlag(TfsEvents.WorkItemCodeReviewRequested) && IsCodeReviewRequest)
                 && collection.IsMatchOrNoPattern(r.TeamProjectCollection)
-                && ProjectName.IsMatchOrNoPattern(r.TeamProject));
+                && ProjectName.IsMatchOrNoPattern(r.TeamProject)
+                && AreaPath.IsMatchOrNoPattern(r.TeamAreaPath));
 
             if (rule != null) return rule.Notify;
 

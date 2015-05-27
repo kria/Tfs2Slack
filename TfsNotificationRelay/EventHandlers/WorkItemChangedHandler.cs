@@ -43,8 +43,10 @@ namespace DevCore.TfsNotificationRelay.EventHandlers
                 WiId = ev.CoreFields.IntegerFields.Single(f => f.ReferenceName == "System.Id").NewValue,
                 WiTitle = ev.WorkItemTitle,
                 ProjectName = ev.PortfolioProject,
+                AreaPath = ev.AreaPath,
                 IsStateChanged = ev.ChangedFields.StringFields.Any(f => f.ReferenceName == "System.State"),
                 IsAssignmentChanged = ev.ChangedFields.StringFields.Any(f => f.ReferenceName == "System.AssignedTo"),
+                IsCodeReviewRequest = ev.CoreFields.StringFields.Single(f => f.ReferenceName == "System.WorkItemType").NewValue.Contains("Code Review Request"),
                 State = ev.CoreFields.StringFields.Single(f => f.ReferenceName == "System.State").NewValue,
                 AssignedTo = ev.CoreFields.StringFields.Single(f => f.ReferenceName == "System.AssignedTo").NewValue
             };
