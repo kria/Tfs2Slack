@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace DevCore.TfsNotificationRelay.Notifications
 {
-    public class BuildCompletionNotification : BuildNotification
+    public class BuildCompletionNotification : BuildNotification, IBuildCompletionNotification
     {
     }
 }

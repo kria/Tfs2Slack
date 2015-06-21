@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 
 namespace DevCore.TfsNotificationRelay.Notifications
 {
-    public class WorkItemChangedNotification : BaseNotification
+    public class WorkItemChangedNotification : BaseNotification, IWorkItemChangedNotification
     {
         protected static Configuration.SettingsElement settings = Configuration.TfsNotificationRelaySection.Instance.Settings;
 

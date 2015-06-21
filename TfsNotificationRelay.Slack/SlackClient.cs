@@ -23,7 +23,7 @@ using System.Threading.Tasks;
 
 namespace DevCore.TfsNotificationRelay.Slack
 {
-    class SlackClient : HttpClient
+    internal class SlackClient : HttpClient, ISlackClient
     {
         public Task<HttpResponseMessage> SendMessageAsync(Message message, string webhookUrl)
         {

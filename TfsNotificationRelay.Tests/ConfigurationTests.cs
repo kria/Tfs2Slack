@@ -11,17 +11,16 @@
  * (at your option) any later version. See included file COPYING for details.
  */
 
-using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Configuration;
 using DevCore.TfsNotificationRelay.Configuration;
+using NUnit.Framework;
 
 namespace TfsNotificationRelay.Tests
 {
-    [TestClass]
-    public class ConfigurationTests
+    [TestFixture]
+    class ConfigurationTests
     {
-        [TestMethod]
+        [Test]
         public void Load_DefaultConfiguration_ShouldSucceed()
         {
             var config = ConfigurationManager.GetSection("tfsNotificationRelay") as TfsNotificationRelaySection;

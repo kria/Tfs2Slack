@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace DevCore.TfsNotificationRelay.Slack
 {
-    class PayloadSettings
+    internal class PayloadSettings
     {
         public PayloadSettings() { }
 
