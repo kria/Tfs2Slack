@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LyncPersistentChatClient.cs" />
+    <Compile Include="LyncPersistentChatMessage.cs" />
     <Compile Include="LyncPersistentChatNotifier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

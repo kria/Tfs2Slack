@@ -25,12 +25,10 @@ namespace DevCore.TfsNotificationRelay.LyncPersistentChat
                 foreach (string line in lines)
                     message += String.Format("{0}\r\n", line);
             var client = new LyncPersistentChatClient();
-            client.Connect(user, password);
-            await Task.Run(() => {
-                client.JoinRoom(room);
-                client.SendSimpleMessage(message);
-            }
-            );
+            await client.ConnectAsync(user, password);
+            await client.JoinRoomAsync(room);
+            await client.SendSimpleMessageAsync(message);
+            client.Dispose();
         }
     }
 }

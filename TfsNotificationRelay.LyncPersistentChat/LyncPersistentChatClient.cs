@@ -9,10 +9,11 @@ using Microsoft.Rtc.Collaboration.PersistentChat.Management;
 using Microsoft.Rtc.Collaboration.Presence;
 using Microsoft.Rtc.Signaling;
 using System.Collections.ObjectModel;
+using DevCore.TfsNotificationRelay.LyncPersistentChat;
 
 namespace TfsNotificationRelay.LyncPersistentChat
 {
-    public class LyncPersistentChatClient
+    public class LyncPersistentChatClient : IDisposable
     {
         private Uri _persistentChatServerUri;
         private PersistentChatEndpoint _persistentChatEndpoint;
@@ -21,20 +22,6 @@ namespace TfsNotificationRelay.LyncPersistentChat
         private ProvisioningData _provisioningData;
         private ChatRoomSnapshot _room;
         private ChatRoomSession _session;
-
-        public enum Emjois {
-            Smile = 0,
-            Frown = 1,
-            Cool = 2,
-            Laughing = 3,
-            Schocked = 4,
-            Confused = 5,
-            Crying = 6,
-            Tounge = 7,
-            Wink = 8,
-            Angry = 9,
-            Kissing = 10
-        };
 
         public LyncPersistentChatClient()
         {
@@ -149,6 +136,15 @@ namespace TfsNotificationRelay.LyncPersistentChat
             return true;
         }
 
+        public bool IsUserEndpointEstablished()
+        {
+            if (_userEndpoint == null)
+                return false;
+            if (_userEndpoint.State != LocalEndpointState.Established && _userEndpoint.State != LocalEndpointState.Idle)
+                return false;
+            return true;
+        }
+
         public bool IsPersistentChatEnpointEstablished()
         {
             if (_persistentChatEndpoint == null)
@@ -197,6 +193,51 @@ namespace TfsNotificationRelay.LyncPersistentChat
                 chatSimpleStory.AppendPlainText(message);
                 await Task.Factory.FromAsync(_session.BeginSendChatMessage(chatSimpleStory, null, null), _session.EndSendChatMessage);
             }
+        }
+
+        public void SendCustomMessage(LyncPersistentChatMessage message)
+        {
+            if (IsSessionEstablished())
+            {
+                _session.EndSendChatMessage(_session.BeginSendChatMessage(message.getLyncMessage(), null, null));
+            }
+        }
+
+        public async Task SendCustomMessageAsync(LyncPersistentChatMessage message)
+        {
+            if (IsSessionEstablished())
+            {
+                await Task.Factory.FromAsync(_session.BeginSendChatMessage(message.getLyncMessage(), null, null), _session.EndSendChatMessage);
+            }
+        }
+
+        public void Dispose()
+        {
+            if (IsSessionEstablished())
+            {
+                var tEndSession = Task.Factory.FromAsync(_session.BeginLeave(null, null), _session.EndLeave);
+                tEndSession.Wait();
+            }
+            _session = null;
+            _room = null;
+            if (IsPersistentChatEnpointEstablished())
+            {
+                var tEndChatEndpoint = Task.Factory.FromAsync(_persistentChatEndpoint.BeginTerminate(null, null), _persistentChatEndpoint.EndTerminate);
+                tEndChatEndpoint.Wait();
+            }
+            _persistentChatEndpoint = null;
+            _persistentChatServerUri = null;
+            if (IsUserEndpointEstablished())
+            {
+                var tEndUserEndpoint = Task.Factory.FromAsync(_userEndpoint.BeginTerminate(null, null), _userEndpoint.EndTerminate);
+                tEndUserEndpoint.Wait();
+            }
+            _userEndpoint = null;
+            _provisioningData = null;
+            var tEndPlatform = Task.Factory.FromAsync(_collaborationPlatform.BeginShutdown(null, null), _collaborationPlatform.EndShutdown);
+            tEndPlatform.Wait();
+            _collaborationPlatform = null;
+
         }
     }
 }

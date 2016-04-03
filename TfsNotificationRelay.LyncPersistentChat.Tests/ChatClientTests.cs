@@ -20,6 +20,7 @@ namespace TfsNotificationRelay.Lync.Tests
         {
             var testObject = new LyncPersistentChatClient();
             testObject.Connect(Properties.Settings.Default.username, Properties.Settings.Default.password);
+            testObject.Dispose();
         }
 
         [TestMethod]
@@ -27,6 +28,7 @@ namespace TfsNotificationRelay.Lync.Tests
         {
             var testObject = new LyncPersistentChatClient();
             await testObject.ConnectAsync(Properties.Settings.Default.username, Properties.Settings.Default.password);
+            testObject.Dispose();
         }
 
         [TestMethod]
@@ -61,6 +63,13 @@ namespace TfsNotificationRelay.Lync.Tests
             testObject.Connect(Properties.Settings.Default.username, Properties.Settings.Default.password);
             Assert.IsTrue(testObject.JoinRoom(Properties.Settings.Default.room), "Join Room failed");
             testObject.SendStoryMessage("Story-Message Title","Einfache Test-Nachricht vom Unit-Test.",true);
+        }
+
+        [TestMethod]
+        public void Lync_Dispose_NotConnected_ShouldSucceed()
+        {
+            var testObject = new LyncPersistentChatClient();
+            testObject.Dispose();
         }
     }
 }
